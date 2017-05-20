@@ -106,9 +106,24 @@ public class PlayerController : MonoBehaviour
         }
 	}
 
-    public void Move(Direction direction)
+    public void Move(Vector3 direction)
     {
-        _lastDirection = direction;
+        if (direction.y > 0f)
+        {
+            _lastDirection = Direction.Up;
+        }
+        if (direction.y < 0f)
+        {
+            _lastDirection = Direction.Down;
+        }
+        if (direction.x > 0f)
+        {
+            _lastDirection = Direction.Right;
+        }
+        if (direction.x < 0f)
+        {
+            _lastDirection = Direction.Left;
+        }
     }
 
     private IEnumerator DoMove(Vector3 direction, float timeToMove)
