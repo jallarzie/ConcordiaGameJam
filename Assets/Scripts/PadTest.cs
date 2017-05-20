@@ -21,7 +21,7 @@ public class PadTest : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.transform.tag == "PlayerModel")
+        if (collider.transform.tag == "Player")
         {
             originPositionOfPlayer = player.GetComponent<PlayerController>().origin;
             GameManager.instance.SetPatternIndicationMode(true);
@@ -49,10 +49,14 @@ public class PadTest : MonoBehaviour {
             0, padTestEnd.position.z);
     }
 
-    public void makePlayerGoOut()
+    public IEnumerator makePlayerGoOut()
     {
-        //player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player rotate
-        //player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player move
+        player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player rotate
+        yield return new WaitForSeconds(0.5f);
+        player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player move
     }
 
+    public void ChangeMaterial()
+    {
+    }
 }

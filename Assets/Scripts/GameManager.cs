@@ -67,13 +67,14 @@ public class GameManager : MonoBehaviour {
         patternIndicatorMode = false;
         playerController.enabled = true;
         padTest.Teleportation();
+        padTest.ChangeMaterial();
     }
 
     public void ActionsForWrongCombination()
     {
         patternIndicatorMode = false;
         playerController.enabled = true;
-        padTest.makePlayerGoOut();
+        StartCoroutine(padTest.makePlayerGoOut());
 
     }
 }

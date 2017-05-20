@@ -10,7 +10,6 @@ public class AIMovement : MonoBehaviour {
     public float timeToMakeMovement;
     public float timeToMakeRotation;
     public bool loop;
-    public float visionDistance = 2f;
 
     private int currentIndex;
     private bool isDoingAction;
@@ -250,43 +249,6 @@ public class AIMovement : MonoBehaviour {
         timer += Time.deltaTime;
     }
 
-    private void FixedUpdate()
-    {
-        CheckFieldOfView();
-
-    }
-
-    private void CheckFieldOfView()
-    {
-        GameObject player = GameObject.FindWithTag("Player");
-        Vector3 vectorBetweenGuardAndPlayer = player.transform.position - transform.position;
-        Vector3 localForward = transform.forward;
-        RaycastHit hit;
-
-        bool firstObjectRayIntersect = Physics.Raycast(transform.position, vectorBetweenGuardAndPlayer, out hit, Mathf.Infinity);  
-        if (firstObjectRayIntersect)
-        {
-            if (hit.transform.tag != "Player")
-            {
-                return;
-            } else
-            {
-                // Debug.Log("Player in field of view");
-            }
-        }
-        float distance = vectorBetweenGuardAndPlayer.magnitude;
-
-        // if player is close enough
-        if (distance < visionDistance)
-        {
-            float angle = Vector3.Angle(localForward, vectorBetweenGuardAndPlayer);
-            if (angle < 20f)
-            {
-                Debug.Log("Player detected");
-            }
-        }         
-    }
-
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -294,7 +256,7 @@ public class AIMovement : MonoBehaviour {
         Vector3 vectorBetweenGuardAndPlayer = player.transform.position - transform.position;
         Vector3 localForward = transform.forward;
         vectorBetweenGuardAndPlayer.Normalize();
-        vectorBetweenGuardAndPlayer = vectorBetweenGuardAndPlayer * visionDistance;
+        //vectorBetweenGuardAndPlayer = vectorBetweenGuardAndPlayer * visionDistance;
 
         Vector3 localForwardAngleMin = Quaternion.Euler(0, -20, 0) * localForward;
         Vector3 localForwardAngleMax = Quaternion.Euler(0, 20, 0) * localForward;

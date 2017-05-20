@@ -141,6 +141,7 @@ public class PlayerController : MonoBehaviour
 
         float moveTime = 0f;
 
+        origin = transform.position;
         LayerMask maskToIgnore = 8;
         if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f, maskToIgnore))
         {
