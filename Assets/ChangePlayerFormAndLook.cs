@@ -61,7 +61,7 @@ public class ChangePlayerFormAndLook : MonoBehaviour {
 
 	}
 
-	void OnCollisionEnter(Collision col){
+	void OnTriggerEnter(Collider col){
 		
 		Mesh currentColForm = col.gameObject.GetComponent<MeshFilter> ().mesh;
 		Material currentColStyle = col.gameObject.GetComponent<Renderer> ().material;
