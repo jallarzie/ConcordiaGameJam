@@ -51,8 +51,8 @@ public class PadTest : MonoBehaviour {
 
     public void makePlayerGoOut()
     {
-        player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player rotate
-        player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player move
+        //player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player rotate
+        //player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player move
     }
 
 }
