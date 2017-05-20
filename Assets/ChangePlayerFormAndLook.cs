@@ -69,19 +69,23 @@ public class ChangePlayerFormAndLook : MonoBehaviour {
 		Debug.Log (currentColForm);
 		Debug.Log (currentColStyle);
 
+		if(col.gameObject.tag == "ShapeShifter"){
 
-		if (!copyForm.Contains (currentColForm)) {
-			copyForm.Add (currentColForm);
+
+			if (!copyForm.Contains (currentColForm)) {
+				copyForm.Add (currentColForm);
+			}
+			currentFormIndex = copyForm.IndexOf (currentColForm);
+			ChangeForm (currentFormIndex);
+
+
+			if(!copyStyle.Contains(currentColStyle)){
+				copyStyle.Add(currentColStyle);
+			}
+			currentStyleIndex = copyStyle.IndexOf (currentColStyle);
+			ChangeStyle(currentStyleIndex);
+
 		}
-		currentFormIndex = copyForm.IndexOf (currentColForm);
-		ChangeForm (currentFormIndex);
-
-
-		if(!copyStyle.Contains(currentColStyle)){
-			copyStyle.Add(currentColStyle);
-		}
-		currentStyleIndex = copyStyle.IndexOf (currentColStyle);
-		ChangeStyle(currentStyleIndex);
 
 	}
 
