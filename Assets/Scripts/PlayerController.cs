@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
                 yield return null;
 
                 moveTime += Time.deltaTime / timeToMove;
-                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime, 0f);
             } while (moveTime < 1.0f);
         }
         else
@@ -138,13 +138,13 @@ public class PlayerController : MonoBehaviour
                 
                 moveTime += Time.deltaTime / timeToMove;
                 transform.localPosition = Vector3.Lerp(origin, destination, moveTime);
-                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime, 0f);
             } while (moveTime < 1.0f);
 
             transform.localPosition = destination;
         }
 
-        _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+        _playerModel.transform.localPosition = Vector3.zero;
 
         _isMoving = false;
     }
