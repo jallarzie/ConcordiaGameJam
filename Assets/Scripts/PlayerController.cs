@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
 {
     public Action<MoveAction> OnAction = delegate{};
 
-    public Vector3 origin; // used for Padtest
     [SerializeField]
     private float _moveDistance;
     [SerializeField]
@@ -32,6 +31,9 @@ public class PlayerController : MonoBehaviour
     private bool _isMoving;
     private Direction _lastDirection = Direction.None;
     private bool _acceptingInput;
+
+    public Vector3 origin;
+    public Vector3 destination;
 
     public Form CurrentForm { get; private set; }
 
@@ -141,11 +143,12 @@ public class PlayerController : MonoBehaviour
 
         float moveTime = 0f;
 
-        origin = transform.position;
+        origin = transform.localPosition;
         LayerMask maskToIgnore = 8;
         if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f, maskToIgnore))
         {
             transform.forward = direction;
+            destination = origin;
 
             do
             {
@@ -157,8 +160,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Vector3 origin = transform.localPosition;
-            Vector3 destination = origin + direction * _moveDistance;
+            destination = origin + direction * _moveDistance;
 
             do
             {
@@ -180,5 +182,11 @@ public class PlayerController : MonoBehaviour
     public bool isMoving()
     {
         return _isMoving;
+    }
+
+    public void ResetToPosition(Vector3 position)
+    {
+        transform.position = position;
+        destination = transform.localPosition;
     }
 }
