@@ -5,24 +5,27 @@ using UnityEngine;
 
 public class PadTest : MonoBehaviour {
 
+    public Vector3 originPositionOfPlayer;
+    public GameObject guardRelated;
     public Transform padTestEnd;
     public Transform player;
 
+    void Start() {
 
+    }
 
-	void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
+    void Update() {
+
+    }
 
     void OnTriggerEnter(Collider collider)
-    {       
+    {
         if (collider.transform.tag == "PlayerModel")
         {
-            StartCoroutine(Teleport());
+            originPositionOfPlayer = player.GetComponent<PlayerController>().origin;
+            GameManager.instance.SetPatternIndicationMode(true);
+            GameManager.instance.GetPattern(this, guardRelated.GetComponent<AIMovement>().actions);
+            GameManager.instance.SetPlayerControllerScript(false);
         }
     }
 
@@ -37,6 +40,18 @@ public class PadTest : MonoBehaviour {
             padTestEnd.position.y, padTestEnd.position.z);
         Debug.Log(padTestEnd.transform.position);
         yield return null;
+    }
+
+    public void Teleportation()
+    {
+        player.position = new Vector3(padTestEnd.position.x,
+            0, padTestEnd.position.z);
+    }
+
+    public void makePlayerGoOut()
+    {
+        player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player rotate
+        player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player move
     }
 
 }

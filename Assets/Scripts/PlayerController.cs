@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
 {
+    public Vector3 origin; // used for Padtest
     [SerializeField]
     private float _moveDistance;
     [SerializeField]
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
         }
 	}
 
-    private void Move(Vector3 direction)
+    public void Move(Vector3 direction)
     {
         StartCoroutine(DoMove(direction));
     }
@@ -69,7 +70,7 @@ public class PlayerController : MonoBehaviour
         {
             _isMoving = true;
 
-            Vector3 origin = transform.localPosition;
+            origin = transform.localPosition;
             Vector3 destination = origin + direction * _moveDistance;
 
             float moveTime = 0f;
