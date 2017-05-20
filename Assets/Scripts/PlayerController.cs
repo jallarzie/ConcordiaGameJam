@@ -1,20 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using InControl;
-
-public enum Direction
-{
-    None,
-    Up,
-    Down,
-    Left,
-    Right
-}
 
 public class PlayerController : MonoBehaviour 
 {
-    public Vector3 origin; // used for Padtest
     [SerializeField]
     private float _moveDistance;
     [SerializeField]
@@ -27,148 +16,79 @@ public class PlayerController : MonoBehaviour
     private Transform _raycastPoint;
 	
     private bool _isMoving;
-    private Direction _lastDirection = Direction.None;
-    private bool _acceptingInput;
 
-    private void Start()
+	private void Update() 
     {
-        StartCoroutine(InputLoop());
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || InputManager.ActiveDevice.DPad.Up.WasPressed)
+        if (!_isMoving)
         {
-            _lastDirection = Direction.Up;
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow) || InputManager.ActiveDevice.DPad.Down.WasPressed)
-        {
-            _lastDirection = Direction.Down;
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || InputManager.ActiveDevice.DPad.Left.WasPressed)
-        {
-            _lastDirection = Direction.Left;
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow) || InputManager.ActiveDevice.DPad.Right.WasPressed)
-        {
-            _lastDirection = Direction.Right;
-        }
-    }
-
-    private IEnumerator InputLoop() 
-    {
-        float inputTimer = 0f;
-
-        while (true)
-        {
-            if (_lastDirection != Direction.None)
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            if (Mathf.Abs(horizontal) > 0.1f || Mathf.Abs(vertical) > 0.1f)
             {
-                Direction direction = _lastDirection;
-                _lastDirection = Direction.None;
-
-                Debug.Log("Hop");
-
-                switch (direction)
+                if (Mathf.Abs(horizontal) > Mathf.Abs(vertical))
                 {
-                    case Direction.Up:
-                        yield return StartCoroutine(DoMove(Vector3.forward, _moveInterval - inputTimer));
-                        break;
-                    case Direction.Down:
-                        yield return StartCoroutine(DoMove(Vector3.back, _moveInterval - inputTimer));
-                        break;
-                    case Direction.Left:
-                        yield return StartCoroutine(DoMove(Vector3.left, _moveInterval - inputTimer));
-                        break;
-                    case Direction.Right:
-                        yield return StartCoroutine(DoMove(Vector3.right, _moveInterval - inputTimer));
-                        break;
+                    Move(new Vector3(Mathf.Sign(horizontal) * 1f, 0f, 0f));
+                }
+                else
+                {
+                    Move(new Vector3(0f, 0f, Mathf.Sign(vertical) * 1f));
                 }
             }
-            else
-            {
-                while (inputTimer < _moveInterval / 2f)
-                {
-                    if (_lastDirection != Direction.None)
-                    {
-                        break;
-                    }
-
-                    yield return null;
-
-                    inputTimer += Time.deltaTime;
-                }
-
-                if (_lastDirection == Direction.None)
-                {
-                    Debug.Log("No Hop");
-
-                    yield return new WaitForSeconds(_moveInterval - inputTimer);
-                }
-            }
-
-            inputTimer = 0f;
         }
 	}
 
-<<<<<<< HEAD
-    private IEnumerator DoMove(Vector3 direction, float timeToMove)
-=======
-    public void Move(Vector3 direction)
->>>>>>> origin/teleport
+    private void Move(Vector3 direction)
     {
-        _isMoving = true;
+        StartCoroutine(DoMove(direction));
+    }
 
-        float moveTime = 0f;
-
-<<<<<<< HEAD
-        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f))
-=======
     private IEnumerator DoMove(Vector3 direction)
     {
-        LayerMask maskToIgnore = 8;
-        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f, maskToIgnore))
->>>>>>> origin/teleport
+        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f))
         {
             transform.forward = direction;
+            _isMoving = true;
 
-            do
+            float moveTime = 0f;
+
+            yield return null;
+
+            while (moveTime < 1.0f)
             {
+                moveTime += Time.deltaTime / _moveInterval;
+                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
                 yield return null;
+            }
 
-                moveTime += Time.deltaTime / timeToMove;
-                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime, 0f);
-            } while (moveTime < 1.0f);
+            _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+
+            _isMoving = false;
         }
         else
         {
-<<<<<<< HEAD
-            Vector3 origin = transform.localPosition;
-=======
             _isMoving = true;
 
-            origin = transform.localPosition;
->>>>>>> origin/teleport
+            Vector3 origin = transform.localPosition;
             Vector3 destination = origin + direction * _moveDistance;
 
-            do
+            float moveTime = 0f;
+
+            yield return null;
+
+            while (moveTime < 1.0f)
             {
-                yield return null;
-                
-                moveTime += Time.deltaTime / timeToMove;
+                moveTime += Time.deltaTime / _moveInterval;
                 transform.localPosition = Vector3.Lerp(origin, destination, moveTime);
-                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime, 0f);
-            } while (moveTime < 1.0f);
+                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+                yield return null;
+            }
 
             transform.localPosition = destination;
+            _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+
+            yield return null;
+
+            _isMoving = false;
         }
-
-        _playerModel.transform.localPosition = Vector3.zero;
-
-        _isMoving = false;
-    }
-
-    public bool isMoving()
-    {
-        return _isMoving;
     }
 }

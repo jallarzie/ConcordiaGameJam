@@ -25,7 +25,6 @@ public class AIMovement : MonoBehaviour {
     private Transform _raycastPoint;
     [SerializeField]
     private GameObject _guardModel;
-    private bool coroutineStarted;
 
     private const int MOVE_FORWARD = 1;
     private const int MOVE_BACK = 2;
@@ -45,7 +44,6 @@ public class AIMovement : MonoBehaviour {
         timer = 0.0f;
         move = true;
         transition = false;
-        coroutineStarted = false;
 	}
 
     private void SetDestination()
@@ -82,7 +80,7 @@ public class AIMovement : MonoBehaviour {
                     destination = transform.position + transform.right;
                     break;
                 case MOVE_PAUSE:
-                    move = false;
+                    move = true;
                     rotate = false;
                     destination = transform.position;
                     break;
@@ -132,7 +130,7 @@ public class AIMovement : MonoBehaviour {
                     destination = transform.position + transform.right;
                     break;
                 case MOVE_PAUSE:
-                    move = false;
+                    move = true;
                     rotate = false;
                     destination = transform.position;
                     break;
@@ -177,34 +175,8 @@ public class AIMovement : MonoBehaviour {
             LookAtDirection();
             return;
         }
-        if (!move && !rotate)
-        {
-            Pause();
-        }
         
 	}
-
-    private void Pause()
-    {
-        if (isDoingAction)
-        {
-            if (HasFinishedAction())
-            {
-                // set isMoving to false
-                isDoingAction = false;
-            }
-        }
-        else
-        {
-            // update aller, currentIndex, start and destination
-            SetAller();
-            start = transform.position;
-            SetDestination();
-            timer = 0.0f;
-            isDoingAction = true;
-        }
-        timer += Time.deltaTime;
-    }
 
     private void Rotate180Degrees()
     {
@@ -218,22 +190,17 @@ public class AIMovement : MonoBehaviour {
             else
             {
                 // continue the rotation
-                //Vector3 direction = destination - start;
-                //direction.Normalize();
+                Vector3 direction = destination - start;
+                direction.Normalize();
 
-                //// if we have a non-zero direction then look towards that direciton otherwise do nothing
-                //if (direction.sqrMagnitude > 0.001f)
-                //{
-                //    float toRotation = (Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
-                //    float rotation = Mathf.LerpAngle(transform.rotation.eulerAngles.y, toRotation, Time.deltaTime / timeToMakeRotation);
+                // if we have a non-zero direction then look towards that direciton otherwise do nothing
+                if (direction.sqrMagnitude > 0.001f)
+                {
+                    float toRotation = (Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
+                    float rotation = Mathf.LerpAngle(transform.rotation.eulerAngles.y, toRotation, Time.deltaTime / timeToMakeRotation);
 
-                //    transform.rotation = Quaternion.Euler(0, rotation, 0);
-                //}
-            }
-            if (!coroutineStarted)
-            {
-                coroutineStarted = true;
-                StartCoroutine(DoMove());
+                    transform.rotation = Quaternion.Euler(0, rotation, 0);
+                }
             }
         }
         else
@@ -244,7 +211,6 @@ public class AIMovement : MonoBehaviour {
             SetDestination();
             timer = 0.0f;
             isDoingAction = true;
-            coroutineStarted = false;
         }
         timer += Time.deltaTime;
     }
@@ -330,11 +296,6 @@ public class AIMovement : MonoBehaviour {
                 //    transform.rotation = Quaternion.Euler(0, rotation, 0);
                 //}
             }
-            if (!coroutineStarted)
-            {
-                coroutineStarted = true;
-                StartCoroutine(DoMove());
-            }
         }
         else
         {
@@ -344,7 +305,8 @@ public class AIMovement : MonoBehaviour {
             SetDestination();
             timer = 0.0f;
             isDoingAction = true;
-            coroutineStarted = false;
+
+            StartCoroutine(DoMove());
         }
         timer += Time.deltaTime;      
     }
@@ -358,11 +320,6 @@ public class AIMovement : MonoBehaviour {
                 // set isMoving to false
                 isDoingAction = false;               
             }
-            if (!coroutineStarted)
-            {
-                coroutineStarted = true;
-                StartCoroutine(DoMove());
-            }
         } else
         {
             // update aller, currentIndex, start and destination
@@ -371,8 +328,8 @@ public class AIMovement : MonoBehaviour {
             SetDestination();
             timer = 0.0f;
             isDoingAction = true;
-            coroutineStarted = false;
-            
+
+            StartCoroutine(DoMove());
         }
         timer += Time.deltaTime;
     }
