@@ -14,6 +14,7 @@ public enum Direction
 
 public class PlayerController : MonoBehaviour 
 {
+    public Vector3 origin; // used for Padtest
     [SerializeField]
     private float _moveDistance;
     [SerializeField]
@@ -115,7 +116,8 @@ public class PlayerController : MonoBehaviour
 
         float moveTime = 0f;
 
-        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f))
+        LayerMask maskToIgnore = 8;
+        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f, maskToIgnore))
         {
             transform.forward = direction;
 
@@ -147,5 +149,10 @@ public class PlayerController : MonoBehaviour
         _playerModel.transform.localPosition = Vector3.zero;
 
         _isMoving = false;
+    }
+
+    public bool isMoving()
+    {
+        return _isMoving;
     }
 }
