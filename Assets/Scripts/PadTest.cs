@@ -24,9 +24,9 @@ public class PadTest : MonoBehaviour {
         if (collider.transform.tag == "Player")
         {
             originPositionOfPlayer = player.GetComponent<PlayerController>().origin;
+            GameManager.instance.SetPlayerControllerScript(false);
             GameManager.instance.SetPatternIndicationMode(true);
             GameManager.instance.GetPattern(this, guardRelated.GetComponent<AIMovement>().pattern);
-            GameManager.instance.SetPlayerControllerScript(false);
         }
     }
 
@@ -58,5 +58,6 @@ public class PadTest : MonoBehaviour {
 
     public void ChangeMaterial()
     {
+        player.GetChild(0).transform.GetComponent<MeshFilter>().mesh = guardRelated.GetComponentInChildren<MeshFilter>().mesh;
     }
 }

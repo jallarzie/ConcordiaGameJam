@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour {
     public PatternManager patternManager;
 
     private GameObject player;
+    private Mesh meshOriginal;
+    private Vector3 playerPositionOriginal;
     private PadTest padTest;
     private bool patternIndicatorMode;
     private bool musicIsPlaying = false;
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour {
 
     void Start () {
         player = GameObject.FindWithTag("Player");
+        meshOriginal = player.GetComponentInChildren<MeshFilter>().mesh;
+        playerPositionOriginal = player.transform.position;
         playerController = player.GetComponent<PlayerController>();
         patternIndicatorMode = false;
         backgroundAudio.Play();
@@ -48,6 +52,12 @@ public class GameManager : MonoBehaviour {
     public void SetPatternIndicationMode(bool b)
     {
         patternIndicatorMode = b;
+    }
+
+    public void ResetPlayer()
+    {
+        player.transform.position = playerPositionOriginal;
+        player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
     }
 
     public void SetPlayerControllerScript(bool b)
