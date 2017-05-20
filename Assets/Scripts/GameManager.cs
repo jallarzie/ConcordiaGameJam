@@ -8,19 +8,17 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
 
     PlayerController playerController;
-    public GameObject[] guards;
     public float timeToInput = 0.5f;
     public AudioSource backgroundAudio;
     public PatternManager patternManager;
 
-    private GameObject player;
-    private Mesh meshOriginal;
+    // To be reset every time the player is changing rooms
     private Vector3 playerPositionOriginal;
+
+    private Mesh meshOriginal;
+    private GameObject player;
     private PadTest padTest;
     private bool patternIndicatorMode;
-    private bool musicIsPlaying = false;
-    private bool startGuardsMove = false;
-    private float musicTime;
 
     void Awake()
     {
@@ -56,7 +54,7 @@ public class GameManager : MonoBehaviour {
 
     public void ResetPlayer()
     {
-        player.transform.position = playerPositionOriginal;
+        player.GetComponent<PlayerController>().ResetToPosition(playerPositionOriginal);
         player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
     }
 

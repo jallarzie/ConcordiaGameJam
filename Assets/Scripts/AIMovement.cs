@@ -363,12 +363,12 @@ public class AIMovement : MonoBehaviour {
             while (timer < timeToMakeMovement)
             {
                 moveTime = timer / timeToMakeMovement;
-                transform.localPosition = Vector3.Lerp(start, destination, moveTime);
+                transform.position = Vector3.Lerp(start, destination, moveTime);
                 _guardModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
                 yield return null;
             }
 
-            transform.localPosition = destination;
+            transform.position = destination;
             _guardModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
         }
     }
