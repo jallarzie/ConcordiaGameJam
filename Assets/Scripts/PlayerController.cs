@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private GameObject _playerModel;
+
+    [SerializeField]
+    private Transform _raycastPoint;
 	
     private bool _isMoving;
 
@@ -44,30 +47,51 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DoMove(Vector3 direction)
     {
-        _playerModel.transform.forward = direction;
-
-        _isMoving = true;
-
-        Vector3 origin = transform.localPosition;
-        Vector3 destination = origin + direction * _moveDistance;
-
-        float moveTime = 0f;
-
-        yield return null;
-
-        while (Vector3.Distance(transform.localPosition, destination) > 0.001f)
+        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f))
         {
-            moveTime += Time.deltaTime / _moveInterval;
-            transform.localPosition = Vector3.Lerp(origin, destination, moveTime);
-            _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+            transform.forward = direction;
+            _isMoving = true;
+
+            float moveTime = 0f;
+
             yield return null;
+
+            while (moveTime < 1.0f)
+            {
+                moveTime += Time.deltaTime / _moveInterval;
+                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+                yield return null;
+            }
+
+            _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+
+            _isMoving = false;
         }
+        else
+        {
+            _isMoving = true;
 
-        transform.localPosition = destination;
-        _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+            Vector3 origin = transform.localPosition;
+            Vector3 destination = origin + direction * _moveDistance;
 
-        yield return null;
+            float moveTime = 0f;
 
-        _isMoving = false;
+            yield return null;
+
+            while (moveTime < 1.0f)
+            {
+                moveTime += Time.deltaTime / _moveInterval;
+                transform.localPosition = Vector3.Lerp(origin, destination, moveTime);
+                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+                yield return null;
+            }
+
+            transform.localPosition = destination;
+            _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+
+            yield return null;
+
+            _isMoving = false;
+        }
     }
 }
