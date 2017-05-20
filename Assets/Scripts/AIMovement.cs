@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class AIMovement : MonoBehaviour {
 
+    public int[] pattern;
     public int[] actions;
     public float timeToMakeMovement;
     public float timeToMakeRotation;

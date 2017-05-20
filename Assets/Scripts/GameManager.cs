@@ -7,13 +7,13 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
 
-    public GameObject player;
     PlayerController playerController;
     public GameObject[] guards;
     public float timeToInput = 0.5f;
     public AudioSource backgroundAudio;
     public PatternManager patternManager;
 
+    private GameObject player;
     private PadTest padTest;
     private bool patternIndicatorMode;
     private bool musicIsPlaying = false;
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start () {
+        player = GameObject.FindWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
         patternIndicatorMode = false;
         backgroundAudio.Play();

@@ -8,10 +8,11 @@ public class PadTest : MonoBehaviour {
     public Vector3 originPositionOfPlayer;
     public GameObject guardRelated;
     public Transform padTestEnd;
-    public Transform player;
+
+    private Transform player;
 
     void Start() {
-
+        player = GameObject.FindWithTag("Player").transform;
     }
 
     void Update() {
@@ -24,7 +25,7 @@ public class PadTest : MonoBehaviour {
         {
             originPositionOfPlayer = player.GetComponent<PlayerController>().origin;
             GameManager.instance.SetPatternIndicationMode(true);
-            GameManager.instance.GetPattern(this, guardRelated.GetComponent<AIMovement>().actions);
+            GameManager.instance.GetPattern(this, guardRelated.GetComponent<AIMovement>().pattern);
             GameManager.instance.SetPlayerControllerScript(false);
         }
     }
