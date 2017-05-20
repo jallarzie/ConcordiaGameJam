@@ -21,21 +21,18 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isMoving)
         {
-            if (Input.GetKey(KeyCode.UpArrow))
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
+            if (Mathf.Abs(horizontal) > 0.1f || Mathf.Abs(vertical) > 0.1f)
             {
-                Move(Vector3.forward);
-            }
-            else if (Input.GetKey(KeyCode.DownArrow))
-            {
-                Move(Vector3.back);
-            }
-            else if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                Move(Vector3.left);
-            }
-            else if (Input.GetKey(KeyCode.RightArrow))
-            {
-                Move(Vector3.right);
+                if (Mathf.Abs(horizontal) > Mathf.Abs(vertical))
+                {
+                    Move(new Vector3(Mathf.Sign(horizontal) * 1f, 0f, 0f));
+                }
+                else
+                {
+                    Move(new Vector3(0f, 0f, Mathf.Sign(vertical) * 1f));
+                }
             }
         }
 	}
