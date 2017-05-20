@@ -136,3 +136,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveDistance: 1
   _moveInterval: 0.5
+  _playerModel: {fileID: 0}
