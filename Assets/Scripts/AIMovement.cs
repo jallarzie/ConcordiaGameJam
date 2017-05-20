@@ -20,6 +20,11 @@ public class AIMovement : MonoBehaviour {
     private bool move;
     private bool rotate;
     private bool transition;
+    private bool _isMoving;
+    [SerializeField]
+    private Transform _raycastPoint;
+    [SerializeField]
+    private GameObject _guardModel;
 
     private const int MOVE_FORWARD = 1;
     private const int MOVE_BACK = 2;
@@ -32,11 +37,12 @@ public class AIMovement : MonoBehaviour {
     private const int ROTATE_RIGHT = 9;
 
     void Start () {
-        currentIndex = 0;
-        isDoingAction = true;
+        currentIndex = -1;
+        isDoingAction = false;
         start = transform.position;
-        SetDestination();
+        // SetDestination();
         timer = 0.0f;
+        move = true;
         transition = false;
 	}
 
@@ -277,18 +283,18 @@ public class AIMovement : MonoBehaviour {
             }
             else
             {
-                // continue the rotation
-                Vector3 direction = destination - start;
-                direction.Normalize();
+                //// continue the rotation
+                //Vector3 direction = destination - start;
+                //direction.Normalize();
 
-                // if we have a non-zero direction then look towards that direciton otherwise do nothing
-                if (direction.sqrMagnitude > 0.001f)
-                {
-                    float toRotation = (Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
-                    float rotation = Mathf.LerpAngle(transform.rotation.eulerAngles.y, toRotation, Time.deltaTime / timeToMakeRotation);
+                //// if we have a non-zero direction then look towards that direciton otherwise do nothing
+                //if (direction.sqrMagnitude > 0.001f)
+                //{
+                //    float toRotation = (Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
+                //    float rotation = Mathf.LerpAngle(transform.rotation.eulerAngles.y, toRotation, Time.deltaTime / timeToMakeRotation);
 
-                    transform.rotation = Quaternion.Euler(0, rotation, 0);
-                }
+                //    transform.rotation = Quaternion.Euler(0, rotation, 0);
+                //}
             }
         }
         else
@@ -299,6 +305,8 @@ public class AIMovement : MonoBehaviour {
             SetDestination();
             timer = 0.0f;
             isDoingAction = true;
+
+            StartCoroutine(DoMove());
         }
         timer += Time.deltaTime;      
     }
@@ -311,10 +319,6 @@ public class AIMovement : MonoBehaviour {
             {
                 // set isMoving to false
                 isDoingAction = false;               
-            } else
-            {
-                // continue the movement
-                transform.position = Vector3.Lerp(start, destination, timer/timeToMakeMovement);
             }
         } else
         {
@@ -324,8 +328,43 @@ public class AIMovement : MonoBehaviour {
             SetDestination();
             timer = 0.0f;
             isDoingAction = true;
+
+            StartCoroutine(DoMove());
         }
         timer += Time.deltaTime;
+    }
+
+    private IEnumerator DoMove()
+    {
+        float moveTime = 0f;
+        Vector3 direction = destination - start;
+        if (transform.forward != direction)
+        {
+            transform.forward = direction;
+            yield return null;
+
+            while (timer < timeToMakeMovement)
+            {
+                moveTime = timer / timeToMakeMovement;
+                _guardModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+                yield return null;
+            }
+
+            _guardModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+        }
+        else
+        {
+            while (timer < timeToMakeMovement)
+            {
+                moveTime = timer / timeToMakeMovement;
+                transform.localPosition = Vector3.Lerp(start, destination, moveTime);
+                _guardModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+                yield return null;
+            }
+
+            transform.localPosition = destination;
+            _guardModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+        }
     }
 
     private void SetCurrentIndex()
@@ -391,11 +430,6 @@ public class AIMovement : MonoBehaviour {
         if (timer < timeToMakeMovement)
         {
             return false;
-        }
-        // adjust position
-        if (move)
-        {
-            transform.position = destination;
         }
         // adjust rotation
         if (rotate || transition)
