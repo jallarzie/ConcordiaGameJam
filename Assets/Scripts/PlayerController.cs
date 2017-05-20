@@ -1,6 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using InControl;
+
+public enum Direction
+{
+    None,
+    Up,
+    Down,
+    Left,
+    Right
+}
 
 public class PlayerController : MonoBehaviour 
 {
@@ -16,79 +26,126 @@ public class PlayerController : MonoBehaviour
     private Transform _raycastPoint;
 	
     private bool _isMoving;
+    private Direction _lastDirection = Direction.None;
+    private bool _acceptingInput;
 
-	private void Update() 
+    private void Start()
     {
-        if (!_isMoving)
+        StartCoroutine(InputLoop());
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow) || InputManager.ActiveDevice.DPad.Up.WasPressed)
         {
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-            if (Mathf.Abs(horizontal) > 0.1f || Mathf.Abs(vertical) > 0.1f)
+            _lastDirection = Direction.Up;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow) || InputManager.ActiveDevice.DPad.Down.WasPressed)
+        {
+            _lastDirection = Direction.Down;
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || InputManager.ActiveDevice.DPad.Left.WasPressed)
+        {
+            _lastDirection = Direction.Left;
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow) || InputManager.ActiveDevice.DPad.Right.WasPressed)
+        {
+            _lastDirection = Direction.Right;
+        }
+    }
+
+    private IEnumerator InputLoop() 
+    {
+        float inputTimer = 0f;
+
+        while (true)
+        {
+            if (_lastDirection != Direction.None)
             {
-                if (Mathf.Abs(horizontal) > Mathf.Abs(vertical))
+                Direction direction = _lastDirection;
+                _lastDirection = Direction.None;
+
+                Debug.Log("Hop");
+
+                switch (direction)
                 {
-                    Move(new Vector3(Mathf.Sign(horizontal) * 1f, 0f, 0f));
-                }
-                else
-                {
-                    Move(new Vector3(0f, 0f, Mathf.Sign(vertical) * 1f));
+                    case Direction.Up:
+                        yield return StartCoroutine(DoMove(Vector3.forward, _moveInterval - inputTimer));
+                        break;
+                    case Direction.Down:
+                        yield return StartCoroutine(DoMove(Vector3.back, _moveInterval - inputTimer));
+                        break;
+                    case Direction.Left:
+                        yield return StartCoroutine(DoMove(Vector3.left, _moveInterval - inputTimer));
+                        break;
+                    case Direction.Right:
+                        yield return StartCoroutine(DoMove(Vector3.right, _moveInterval - inputTimer));
+                        break;
                 }
             }
+            else
+            {
+                while (inputTimer < _moveInterval / 2f)
+                {
+                    if (_lastDirection != Direction.None)
+                    {
+                        break;
+                    }
+
+                    yield return null;
+
+                    inputTimer += Time.deltaTime;
+                }
+
+                if (_lastDirection == Direction.None)
+                {
+                    Debug.Log("No Hop");
+
+                    yield return new WaitForSeconds(_moveInterval - inputTimer);
+                }
+            }
+
+            inputTimer = 0f;
         }
 	}
 
-    private void Move(Vector3 direction)
+    private IEnumerator DoMove(Vector3 direction, float timeToMove)
     {
-        StartCoroutine(DoMove(direction));
-    }
+        _isMoving = true;
 
-    private IEnumerator DoMove(Vector3 direction)
-    {
+        float moveTime = 0f;
+
         if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f))
         {
             transform.forward = direction;
-            _isMoving = true;
 
-            float moveTime = 0f;
-
-            yield return null;
-
-            while (moveTime < 1.0f)
+            do
             {
-                moveTime += Time.deltaTime / _moveInterval;
-                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
                 yield return null;
-            }
 
-            _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
-
-            _isMoving = false;
+                moveTime += Time.deltaTime / timeToMove;
+                _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
+            } while (moveTime < 1.0f);
         }
         else
         {
-            _isMoving = true;
-
             Vector3 origin = transform.localPosition;
             Vector3 destination = origin + direction * _moveDistance;
 
-            float moveTime = 0f;
-
-            yield return null;
-
-            while (moveTime < 1.0f)
+            do
             {
-                moveTime += Time.deltaTime / _moveInterval;
+                yield return null;
+                
+                moveTime += Time.deltaTime / timeToMove;
                 transform.localPosition = Vector3.Lerp(origin, destination, moveTime);
                 _playerModel.transform.localPosition = new Vector3(0f, -4 * moveTime * moveTime + 4 * moveTime + 0.5f, 0f);
-                yield return null;
-            }
+            } while (moveTime < 1.0f);
 
             transform.localPosition = destination;
-            _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
-
-            yield return null;
-
-            _isMoving = false;
         }
+
+        _playerModel.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+
+        _isMoving = false;
     }
 }

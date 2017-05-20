@@ -180,6 +180,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveDistance: 1
-  _moveInterval: 0.5
+  _moveInterval: 0.6
   _playerModel: {fileID: 1220995545012072}
   _raycastPoint: {fileID: 4820247116224518}
