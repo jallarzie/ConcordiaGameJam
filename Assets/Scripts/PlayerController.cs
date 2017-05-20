@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using InControl;
+using System;
 
 public enum Direction
 {
@@ -14,6 +15,8 @@ public enum Direction
 
 public class PlayerController : MonoBehaviour 
 {
+    public Action<MoveAction> OnAction = delegate{};
+
     public Vector3 origin; // used for Padtest
     [SerializeField]
     private float _moveDistance;
@@ -30,8 +33,11 @@ public class PlayerController : MonoBehaviour
     private Direction _lastDirection = Direction.None;
     private bool _acceptingInput;
 
+    public Form CurrentForm { get; private set; }
+
     private void Start()
     {
+        CurrentForm = Form.Bunny;
         StartCoroutine(InputLoop());
     }
 
@@ -66,6 +72,8 @@ public class PlayerController : MonoBehaviour
                 Direction direction = _lastDirection;
                 _lastDirection = Direction.None;
 
+                OnAction(MoveAction.Hop);
+
                 switch (direction)
                 {
                     case Direction.Up:
@@ -98,6 +106,7 @@ public class PlayerController : MonoBehaviour
 
                 if (_lastDirection == Direction.None)
                 {
+                    OnAction(MoveAction.NoHop);
                     yield return new WaitForSeconds(_moveInterval - inputTimer);
                 }
             }

@@ -23,14 +23,30 @@ public class PatternValidator : MonoBehaviour {
     private float _interval;
 
     [SerializeField]
-    private MoveAction[][] _patterns;
+    private MoveAction[] _bunnyPattern;
+
+    [SerializeField]
+    private MoveAction[] _frogPattern;
+
+    [SerializeField]
+    private MoveAction[] _fishPattern;
 
     private int _currentAction;
+
+    public static PatternValidator Instance
+    {
+        get;
+        private set;
+    }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
         _currentAction = 0;
-
         StartCoroutine(PatternLoop());
     }
 
@@ -46,6 +62,16 @@ public class PatternValidator : MonoBehaviour {
 
     public MoveAction GetCurrentActionForForm(Form form)
     {
-        return _patterns[(int)form][_currentAction];
+        switch(form)
+        {
+            case Form.Bunny:
+                return _bunnyPattern[_currentAction];
+            case Form.Frog:
+                return _frogPattern[_currentAction];
+            case Form.Fish:
+                return _fishPattern[_currentAction];
+        }
+
+        return MoveAction.NoHop;
     }
 }
