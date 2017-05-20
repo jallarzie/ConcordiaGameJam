@@ -44,7 +44,8 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DoMove(Vector3 direction)
     {
-        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f))
+        LayerMask maskToIgnore = 8;
+        if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f, maskToIgnore))
         {
             transform.forward = direction;
             _isMoving = true;
@@ -90,5 +91,10 @@ public class PlayerController : MonoBehaviour
 
             _isMoving = false;
         }
+    }
+
+    public bool isMoving()
+    {
+        return _isMoving;
     }
 }

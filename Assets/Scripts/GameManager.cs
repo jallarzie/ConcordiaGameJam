@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void Update () {
-        Debug.Log(backgroundAudio.time);
+        //Debug.Log(backgroundAudio.time);
 	}
 
     
