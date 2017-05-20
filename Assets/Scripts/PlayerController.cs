@@ -66,8 +66,6 @@ public class PlayerController : MonoBehaviour
                 Direction direction = _lastDirection;
                 _lastDirection = Direction.None;
 
-                Debug.Log("Hop");
-
                 switch (direction)
                 {
                     case Direction.Up:
@@ -100,8 +98,6 @@ public class PlayerController : MonoBehaviour
 
                 if (_lastDirection == Direction.None)
                 {
-                    Debug.Log("No Hop");
-
                     yield return new WaitForSeconds(_moveInterval - inputTimer);
                 }
             }
@@ -109,6 +105,11 @@ public class PlayerController : MonoBehaviour
             inputTimer = 0f;
         }
 	}
+
+    public void Move(Direction direction)
+    {
+        _lastDirection = direction;
+    }
 
     private IEnumerator DoMove(Vector3 direction, float timeToMove)
     {
