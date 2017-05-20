@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using InControl;
+using System;
 
 public enum Direction
 {
@@ -14,7 +15,8 @@ public enum Direction
 
 public class PlayerController : MonoBehaviour 
 {
-    public Vector3 origin; // used for Padtest
+    public Action<MoveAction> OnAction = delegate{};
+
     [SerializeField]
     private float _moveDistance;
     [SerializeField]
@@ -30,8 +32,14 @@ public class PlayerController : MonoBehaviour
     private Direction _lastDirection = Direction.None;
     private bool _acceptingInput;
 
+    public Vector3 origin;
+    public Vector3 destination;
+
+    public Form CurrentForm { get; private set; }
+
     private void Start()
     {
+        CurrentForm = Form.Bunny;
         StartCoroutine(InputLoop());
     }
 
@@ -66,6 +74,8 @@ public class PlayerController : MonoBehaviour
                 Direction direction = _lastDirection;
                 _lastDirection = Direction.None;
 
+                OnAction(MoveAction.Hop);
+
                 switch (direction)
                 {
                     case Direction.Up:
@@ -98,6 +108,7 @@ public class PlayerController : MonoBehaviour
 
                 if (_lastDirection == Direction.None)
                 {
+                    OnAction(MoveAction.NoHop);
                     yield return new WaitForSeconds(_moveInterval - inputTimer);
                 }
             }
@@ -132,11 +143,12 @@ public class PlayerController : MonoBehaviour
 
         float moveTime = 0f;
 
-        origin = transform.position;
+        origin = transform.localPosition;
         LayerMask maskToIgnore = 8;
         if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f, maskToIgnore))
         {
             transform.forward = direction;
+            destination = origin;
 
             do
             {
@@ -148,8 +160,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Vector3 origin = transform.localPosition;
-            Vector3 destination = origin + direction * _moveDistance;
+            destination = origin + direction * _moveDistance;
 
             do
             {
@@ -171,5 +182,11 @@ public class PlayerController : MonoBehaviour
     public bool isMoving()
     {
         return _isMoving;
+    }
+
+    public void ResetToPosition(Vector3 position)
+    {
+        transform.position = position;
+        destination = transform.localPosition;
     }
 }
