@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     private GameObject _playerModel;
 
     [SerializeField]
+    private GameObject[] _forms;
+
+    [SerializeField]
     private Transform _raycastPoint;
 	
     private bool _isMoving;
@@ -39,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        CurrentForm = Form.Bunny;
+        CurrentForm = Form.Paper;
         StartCoroutine(InputLoop());
     }
 
@@ -192,7 +195,9 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeForm(Form form)
     {
-        _playerModel.GetComponent<MeshFilter>().mesh = GameManager.instance.GetMeshForForm(form);
-        CurrentForm = form;
+        for (int i = 0; i < _forms.Length; i++)
+        {
+            _forms[i].SetActive(i == (int)form);
+        }
     }
 }

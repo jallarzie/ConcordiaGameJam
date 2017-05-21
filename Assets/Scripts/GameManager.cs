@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
     public GameObject[] rooms;
 
-    public Mesh[] forms;
-
     PlayerController playerController;
     public float timeToInput = 0.5f;
     public AudioSource backgroundAudio;
@@ -96,10 +94,5 @@ public class GameManager : MonoBehaviour {
         playerController.enabled = true;
         StartCoroutine(changePad.makePlayerGoOut());
 
-    }
-
-    public Mesh GetMeshForForm(Form form)
-    {
-        return forms[(int)form];
     }
 }

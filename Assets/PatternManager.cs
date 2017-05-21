@@ -17,7 +17,7 @@ public class PatternManager : MonoBehaviour {
     public AudioSource patternNeutralAudio;
     public AudioSource rufflingPaperAudio;
 
-    private Form selectedForm;
+    private Form selectedForm = Form.Paper;
     private GameObject[] indicatorsArray;
     private PatternValidator  patternValidator;
     private MoveAction[] patternInput;
@@ -117,22 +117,25 @@ public class PatternManager : MonoBehaviour {
     private bool ComparePatterns()
     {
         bool equal = true;
-        for (int i = 0; i < 4; i++)
+        for (int i = 1; i < 5; i++)
         {
             equal = true;
             MoveAction[] pattern = patternValidator.GetPatternForForm((Form)i);
-            for (int j = 0; j < pattern.Length; j++)
+            if (pattern.Length == patternValidator._patternLenght)
             {
-                if (pattern[j] != patternInput[j])
+                for (int j = 0; j < pattern.Length; j++)
                 {
-                    equal = false;
-                    break;
+                    if (pattern[j] != patternInput[j])
+                    {
+                        equal = false;
+                        break;
+                    }
                 }
-            }
-            if (equal)
-            {
-                selectedForm = (Form)i;
-                return true;
+                if (equal)
+                {
+                    selectedForm = (Form)i;
+                    return true;
+                }
             }
         }
         return false;
