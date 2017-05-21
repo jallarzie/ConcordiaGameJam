@@ -6,7 +6,7 @@ using UnityEngine;
 public class PadTest : MonoBehaviour {
 
     public Vector3 originPositionOfPlayer;
-    public GameObject guardRelated;
+    public GameObject[] guardsRelated;
     public Transform padTestEnd;
 
     private Transform player;
@@ -24,9 +24,24 @@ public class PadTest : MonoBehaviour {
         if (collider.transform.tag == "Player")
         {
             originPositionOfPlayer = player.GetComponent<PlayerController>().origin;
-            GameManager.instance.SetPatternIndicationMode(true);
-            GameManager.instance.GetPattern(this, guardRelated.GetComponent<AIMovement>().pattern);
             GameManager.instance.SetPlayerControllerScript(false);
+            GameManager.instance.SetPatternIndicationMode(true);
+            int length = -1;
+            for (int i = 0; i < guardsRelated.Length; i++)
+            {
+                int guardPatternLength = guardsRelated[i].GetComponent<AIMovement>().pattern.Length;
+                // get longest length
+                if (length < guardPatternLength)
+                {
+                    length = guardPatternLength;
+                }
+            }
+            int[][] patterns = new int[guardsRelated.Length][];
+            for (int i = 0; i < guardsRelated.Length; i++)
+            {
+                patterns[i] = guardsRelated[i].GetComponent<AIMovement>().pattern;
+            }
+            GameManager.instance.GetPatterns(this, patterns);
         }
     }
 
@@ -56,7 +71,8 @@ public class PadTest : MonoBehaviour {
         player.GetComponent<PlayerController>().Move(originPositionOfPlayer - player.transform.position); // to make the player move
     }
 
-    public void ChangeMaterial()
+    public void ChangeMaterial(int index)
     {
+        player.GetChild(0).transform.GetComponent<MeshFilter>().mesh = guardsRelated[index].GetComponentInChildren<MeshFilter>().mesh;
     }
 }

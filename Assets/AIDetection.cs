@@ -38,7 +38,8 @@ public class AIDetection : MonoBehaviour {
             float angle = Vector3.Angle(localForward, vectorBetweenGuardAndPlayer);
             if (angle < 20f)
             {
-                Debug.Log("Player detected");
+                Debug.Log("Intruder detected");
+                GameManager.instance.ResetPlayer();
             }
         }
     }
