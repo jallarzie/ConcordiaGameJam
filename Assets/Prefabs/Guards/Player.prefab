@@ -99,8 +99,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1056137844263302}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16, y: 0, z: 7}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 17, y: 0, z: 7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4425393379045386}
@@ -108,7 +108,7 @@ Transform:
   - {fileID: 4820247116224518}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &4820247116224518
 Transform:
   m_ObjectHideFlags: 1
@@ -148,7 +148,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: dad0ebf61d1304e4a84d54378cc41e5e, type: 2}
+  - {fileID: 2100000, guid: 58ce6dc3f50cb634db28cc3612aae102, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -280,8 +280,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6301ec550dd6994c895d4bb90bd1f18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {x: 0, y: 0, z: 0}
   _moveDistance: 1
   _moveInterval: 0.6
   _playerModel: {fileID: 1997196611398516}
   _raycastPoint: {fileID: 4820247116224518}
+  origin: {x: 0, y: 0, z: 0}
+  destination: {x: 0, y: 0, z: 0}

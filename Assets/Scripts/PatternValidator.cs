@@ -56,7 +56,7 @@ public class PatternValidator : MonoBehaviour {
         {
             _currentAction = (_currentAction + 1) % (_patternLenght + 1);
 
-            GameObject[] guards = GameManager.instance.guards;
+/*            GameObject[] guards = GameManager.instance.guards;
 
             for (int i = 0; i < guards.Length; i++)
             {
@@ -65,7 +65,7 @@ public class PatternValidator : MonoBehaviour {
                 {
                     ai.NextAction();
                 }
-            }
+            }*/
 
             yield return new WaitForSeconds(_interval);
         }
