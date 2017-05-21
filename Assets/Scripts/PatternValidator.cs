@@ -31,18 +31,10 @@ public class PatternValidator : MonoBehaviour {
     [SerializeField]
     private MoveAction[] _fishPattern;
 
+    [SerializeField]
+    private AIMovement[] _guards;
+
     private int _currentAction;
-
-    public static PatternValidator Instance
-    {
-        get;
-        private set;
-    }
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     private void Start()
     {
@@ -56,16 +48,14 @@ public class PatternValidator : MonoBehaviour {
         {
             _currentAction = (_currentAction + 1) % (_patternLenght + 1);
 
-/*            GameObject[] guards = GameManager.instance.guards;
-
-            for (int i = 0; i < guards.Length; i++)
+            for (int i = 0; i < _guards.Length; i++)
             {
-                AIMovement ai = guards[i].GetComponent<AIMovement>();
+                AIMovement ai = _guards[i];
                 if (GetCurrentActionForForm(ai.form) == MoveAction.Hop)
                 {
                     ai.NextAction();
                 }
-            }*/
+            }
 
             yield return new WaitForSeconds(_interval);
         }

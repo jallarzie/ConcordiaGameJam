@@ -12,6 +12,9 @@ public class Detector : MonoBehaviour {
     [SerializeField]
     private Color[] _spotColors;
 
+    [SerializeField]
+    private PatternValidator _patternValidator;
+
     private PlayerController _target;
 
     private int _strikes = 0;
@@ -47,7 +50,7 @@ public class Detector : MonoBehaviour {
 
     private void OnTargetAction(MoveAction action)
     {
-        if (action != PatternValidator.Instance.GetCurrentActionForForm(_target.CurrentForm))
+        if (action != _patternValidator.GetCurrentActionForForm(_target.CurrentForm))
         {
             _strikes++;
             _light.color = _spotColors[_strikes < _spotColors.Length ? _strikes : _spotColors.Length - 1];
