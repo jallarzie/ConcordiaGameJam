@@ -25,7 +25,10 @@ public class GameManager : MonoBehaviour {
     internal void ChangeParametersNewRoom()
     {
         currentRoomIndex++;
-        playerPositionOriginal = rooms[currentRoomIndex].transform.Find("SpawnPoint").position;
+        if (currentRoomIndex < rooms.Length)
+        {
+            playerPositionOriginal = rooms[currentRoomIndex].transform.Find("SpawnPoint").position;
+        }
     }
 
     void Awake()
