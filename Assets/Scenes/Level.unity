@@ -1702,7 +1702,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originPositionOfPlayer: {x: 0, y: 0, z: 0}
-  guardRelated: {fileID: 1409656766}
+  guardsRelated:
+  - {fileID: 1409656766}
+  - {fileID: 1203506981}
   padTestEnd: {fileID: 818831538}
 --- !u!23 &150607765
 MeshRenderer:
@@ -1767,7 +1769,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4174194000673252, guid: ab18d666e22346d4cb5617c4019f2238, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 10
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 4174194000673252, guid: ab18d666e22346d4cb5617c4019f2238, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3162,7 +3164,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4488936869330884, guid: 395e5118a0e19e24ca95544decfc136a, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 16
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 4488936869330884, guid: 395e5118a0e19e24ca95544decfc136a, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3242,7 +3244,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originPositionOfPlayer: {x: 0, y: 0, z: 0}
-  guardRelated: {fileID: 1663681712}
+  guardsRelated:
+  - {fileID: 1409656766}
+  - {fileID: 1203506981}
   padTestEnd: {fileID: 372697286}
 --- !u!23 &299963974
 MeshRenderer:
@@ -6169,6 +6173,11 @@ Prefab:
       propertyPath: actions.Array.data[31]
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 33856350365010176, guid: d6d0ca4a5b1832c4e84029327d4d7d83,
+        type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
     m_RemovedComponents:
     - {fileID: 114001617810069234, guid: d6d0ca4a5b1832c4e84029327d4d7d83, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d6d0ca4a5b1832c4e84029327d4d7d83, type: 2}
@@ -7349,6 +7358,11 @@ Transform:
   m_Father: {fileID: 226670250}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
+--- !u!1 &1203506981 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1889362548139836, guid: d6d0ca4a5b1832c4e84029327d4d7d83,
+    type: 2}
+  m_PrefabInternal: {fileID: 1076381391}
 --- !u!1 &1221680421
 GameObject:
   m_ObjectHideFlags: 0
@@ -7477,6 +7491,11 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114352122416532632, guid: 10eebec12e5bdd443b4f3b41d1743f5e,
+        type: 2}
+      propertyPath: m_ChildAlignment
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 10eebec12e5bdd443b4f3b41d1743f5e, type: 2}
@@ -11779,7 +11798,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originPositionOfPlayer: {x: 0, y: 0, z: 0}
-  guardRelated: {fileID: 1663681712}
+  guardsRelated:
+  - {fileID: 1663681712}
   padTestEnd: {fileID: 1126768995}
 --- !u!23 &1891965228
 MeshRenderer:
@@ -11959,6 +11979,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 33856350365010176, guid: d6d0ca4a5b1832c4e84029327d4d7d83,
+        type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
     m_RemovedComponents:
     - {fileID: 114704191376410208, guid: d6d0ca4a5b1832c4e84029327d4d7d83, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d6d0ca4a5b1832c4e84029327d4d7d83, type: 2}

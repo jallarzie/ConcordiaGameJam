@@ -64,18 +64,18 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public void GetPattern(PadTest padTest, int[] pattern)
+    public void GetPatterns(PadTest padTest, int[][] patterns)
     {
         this.padTest = padTest;
-        patternManager.GetPattern(pattern);
+        patternManager.GetPatterns(patterns);
     }
 
-    public void ActionsForRightCombination()
+    public void ActionsForRightCombination(int correctIndex)
     {
         patternIndicatorMode = false;
         playerController.enabled = true;
         padTest.Teleportation();
-        padTest.ChangeMaterial();
+        padTest.ChangeMaterial(correctIndex);
     }
 
     public void ActionsForWrongCombination()
