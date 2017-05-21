@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     PlayerController playerController;
     public float timeToInput = 0.5f;
     public AudioSource backgroundAudio;
+    public AudioSource poofAudio;
     public PatternManager patternManager;
 
     // To be reset every time the player is changing rooms
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour {
     {
         player.GetComponent<PlayerController>().ResetToPosition(playerPositionOriginal);
         player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
+        poofAudio.Play();
     }
 
     public void SetPlayerControllerScript(bool b)
