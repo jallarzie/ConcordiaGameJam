@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
     public GameObject[] rooms;
 
+    public Mesh[] forms;
+
     PlayerController playerController;
     public float timeToInput = 0.5f;
     public AudioSource backgroundAudio;
@@ -74,18 +76,18 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public void GetPatterns(ChangeEffect changePad, int[][] patterns)
+    public void ActivatePad(ChangeEffect changePad, PatternValidator validator)
     {
         this.changePad = changePad;
-        patternManager.GetPatterns(patterns);
+        patternManager.SetPatterValidator(validator);
     }
 
-    public void ActionsForRightCombination(int correctIndex)
+    public void ActionsForRightCombination(Form selectedForm)
     {
         patternIndicatorMode = false;
         playerController.enabled = true;
         changePad.isCorrectPattern = true;
-        //padTest.ChangeMaterial(correctIndex);
+        playerController.ChangeForm(selectedForm);
     }
 
     public void ActionsForWrongCombination()
@@ -94,5 +96,10 @@ public class GameManager : MonoBehaviour {
         playerController.enabled = true;
         StartCoroutine(changePad.makePlayerGoOut());
 
+    }
+
+    public Mesh GetMeshForForm(Form form)
+    {
+        return forms[(int)form];
     }
 }

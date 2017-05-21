@@ -189,4 +189,10 @@ public class PlayerController : MonoBehaviour
         transform.position = position;
         destination = transform.localPosition;
     }
+
+    public void ChangeForm(Form form)
+    {
+        _playerModel.GetComponent<MeshFilter>().mesh = GameManager.instance.GetMeshForForm(form);
+        CurrentForm = form;
+    }
 }
