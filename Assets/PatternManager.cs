@@ -9,9 +9,10 @@ public class PatternManager : MonoBehaviour {
     public GameObject patternIndicatorUI;
     public GameObject indicatorPrefab;
 
+    private int correctIndex = -1;
     private GameObject[] indicatorsArray;
-    private int[] pattern;
-    private int[] patternModified;
+    private int[][] patterns;
+    private int[][] patternsModified;
     private int[] patternInput;
     private int currentIndexPatternInput = 0;
     private bool readyForInput = false;
@@ -57,7 +58,7 @@ public class PatternManager : MonoBehaviour {
                 if (equals)
                 {
                     Reset();
-                    GameManager.instance.ActionsForRightCombination();
+                    GameManager.instance.ActionsForRightCombination(correctIndex);
                     
                 } else
                 {
@@ -76,37 +77,49 @@ public class PatternManager : MonoBehaviour {
         {
             Destroy(indicatorsArray[i]);
         }
-        pattern = null;
-        patternModified = null;
+        patterns = null;
+        patternsModified = null;
         patternInput = null;
         currentIndexPatternInput = 0;
     }
 
     private bool ComparePatterns()
     {
-        for (int i = 0; i < patternModified.Length; i++)
+        bool equal = true;
+        for (int i = 0; i < patternsModified.Length; i++)
         {
-            if (patternModified[i] != patternInput[i])
+            equal = true;
+            for (int j = 0; j < patternsModified[0].Length; j++)
             {
-                return false;
+                if (patternsModified[i][j] != patternInput[j])
+                {
+                    equal = false;
+                    break;
+                }
+            }
+            if (equal)
+            {
+                correctIndex = i;
+                return true;
             }
         }
-        return true;
+        return false;
+        
     }
 
-    public void GetPattern(int[] pattern)
+    public void GetPatterns(int[][] patterns)
     {
-        this.pattern = pattern;
+        this.patterns = patterns;
         SetPatternModified();
-        patternInput = new int[patternModified.Length];
-        indicatorsArray = new GameObject[patternModified.Length];
+        patternInput = new int[patternsModified[0].Length];
+        indicatorsArray = new GameObject[patternsModified[0].Length];
         CreateImageInPatternIndicator();
         readyForInput = true;
     }
 
     private void CreateImageInPatternIndicator()
     {
-        for (int i = 0; i < patternModified.Length; i++)
+        for (int i = 0; i < patternsModified[0].Length; i++)
         {
             GameObject indicator = Instantiate(indicatorPrefab) as GameObject;
             indicator.transform.parent = patternIndicatorUI.transform;
@@ -116,17 +129,24 @@ public class PatternManager : MonoBehaviour {
 
     private void SetPatternModified()
     {
-        if (pattern != null)
+        if (patterns != null)
         {
-            patternModified = new int[pattern.Length];
-            for (int i = 0; i < pattern.Length; i++){
-                if (pattern[i] == MOVE_PAUSE)
-                {
-                    patternModified[i] = NOHOP;
-                } else
-                {
-                    patternModified[i] = HOP;
+            patternsModified = new int[patterns.Length][];          
+            for (int i = 0; i < patterns.Length; i++)
+            {
+                int[] pattern = new int[patterns[i].Length];
+                for (int j = 0; j < patterns[i].Length; j++)
+                {                   
+                    if (patterns[i][j] == MOVE_PAUSE)
+                    {
+                        pattern[j] = NOHOP;
+                    }
+                    else
+                    {
+                        pattern[j] = HOP;
+                    }
                 }
+                patternsModified[i] = pattern;
             }
         }
     }

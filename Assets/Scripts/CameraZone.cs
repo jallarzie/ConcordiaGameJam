@@ -21,5 +21,10 @@ public class CameraZone : MonoBehaviour
             _mainCamera.transform.position = _cameraPoint.position;
             _mainCamera.transform.localRotation = _cameraPoint.localRotation;
         }
+
+        // Change PlayerOriginalPosition and Mesh
+        GameManager.instance.ChangeParametersNewRoom();
+
+
     }
 }
