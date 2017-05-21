@@ -14,11 +14,6 @@ public class MusicTrigger : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
-	void Update () {
-//		Debug.Log (audio.volume);
-		GameObject.Find("BackgroundAudio").GetComponent<AudioSource>().volume = 0;
-	}
 
 	void OnTriggerEnter(Collider col){
 		if (col.gameObject.tag == "Player") {

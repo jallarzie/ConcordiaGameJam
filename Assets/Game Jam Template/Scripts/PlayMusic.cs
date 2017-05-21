@@ -7,7 +7,8 @@ public class PlayMusic : MonoBehaviour {
 
 
 	public AudioClip titleMusic;					//Assign Audioclip for title music loop
-	public AudioClip mainMusic;						//Assign Audioclip for main 
+    public AudioClip mainMusic;						//Assign Audioclip for main 
+    public AudioClip partyMusic;                     //Assign Audioclip for main 
 	public AudioMixerSnapshot volumeDown;			//Reference to Audio mixer snapshot in which the master volume of main mixer is turned down
 	public AudioMixerSnapshot volumeUp;				//Reference to Audio mixer snapshot in which the master volume of main mixer is turned up
 
@@ -58,7 +59,10 @@ public class PlayMusic : MonoBehaviour {
 			//if musicChoice is 1 assigns mainMusic to audio source
 		case 1:
 			musicSource.clip = mainMusic;
-			break;
+                break;
+        case 2:
+            musicSource.clip = partyMusic;
+            break;
 		}
 		//Play the selected clip
 		musicSource.Play ();

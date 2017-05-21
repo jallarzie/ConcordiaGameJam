@@ -7,6 +7,9 @@ public class ChangeEffect : MonoBehaviour {
     [SerializeField]
     private PatternValidator patternValidator;
 
+    [SerializeField]
+    private Form form;
+
     public Vector3 originPositionOfPlayer;
 
 	static float smallParticles = 0.1f;
@@ -63,7 +66,7 @@ public class ChangeEffect : MonoBehaviour {
 
 	}
 
-	void OnTriggerEnter(Collider col){
+	IEnumerator OnTriggerEnter(Collider col){
 		if(col.gameObject.tag == "Player"){
 			Debug.Log ("Im on the pad");
 			padParticles.SetActive(true);
@@ -72,8 +75,19 @@ public class ChangeEffect : MonoBehaviour {
             {
                 originPositionOfPlayer = col.attachedRigidbody.GetComponent<PlayerController>().origin;
                 GameManager.instance.SetPlayerInput(false);
-                GameManager.instance.SetPatternIndicationMode(true);
-                GameManager.instance.ActivatePad(this, patternValidator);
+                /*GameManager.instance.SetPatternIndicationMode(true);
+                GameManager.instance.ActivatePad(this, patternValidator);*/
+
+                yield return new WaitForSeconds(0.2f);
+
+                isCorrectPattern = true;
+
+                yield return new WaitForSeconds(0.2f);
+
+                col.GetComponent<PlayerController>().ChangeForm(form);
+
+
+                GameManager.instance.SetPlayerInput(true);
             }
 		}
 	}

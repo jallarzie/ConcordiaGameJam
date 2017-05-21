@@ -9,6 +9,9 @@ public class CameraZone : MonoBehaviour
 
     private Camera _mainCamera;
 
+    public bool playPartyMusic;
+    public PlayMusic music;
+
     private void Start()
     {
         _mainCamera = Camera.main;
@@ -25,6 +28,9 @@ public class CameraZone : MonoBehaviour
         // Change PlayerOriginalPosition and Mesh
         GameManager.instance.ChangeParametersNewRoom();
 
-
+        if (music != null && playPartyMusic)
+        {
+            music.PlaySelectedMusic(2);
+        }
     }
 }
