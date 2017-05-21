@@ -17,8 +17,7 @@ public enum MoveAction
 
 public class PatternValidator : MonoBehaviour {
 
-    [SerializeField]
-    private int _patternLenght;
+    public int _patternLenght;
     [SerializeField]
     private float _interval;
 
