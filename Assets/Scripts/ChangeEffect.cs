@@ -71,7 +71,7 @@ public class ChangeEffect : MonoBehaviour {
             if (isStartPad)
             {
                 originPositionOfPlayer = col.attachedRigidbody.GetComponent<PlayerController>().origin;
-                GameManager.instance.SetPlayerControllerScript(false);
+                GameManager.instance.SetPlayerInput(false);
                 GameManager.instance.SetPatternIndicationMode(true);
                 GameManager.instance.ActivatePad(this, patternValidator);
             }

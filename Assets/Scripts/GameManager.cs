@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour {
     // To be reset every time the player is changing rooms
     private Vector3 playerPositionOriginal;
 
-    private Mesh meshOriginal;
     private GameObject player;
     private ChangeEffect changePad;
     private bool patternIndicatorMode;
@@ -27,7 +26,6 @@ public class GameManager : MonoBehaviour {
     {
         currentRoomIndex++;
         playerPositionOriginal = rooms[currentRoomIndex].transform.Find("SpawnPoint").position;
-        player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
     }
 
     void Awake()
@@ -42,7 +40,6 @@ public class GameManager : MonoBehaviour {
     void Start () {
         currentRoomIndex = -1;
         player = GameObject.FindWithTag("Player");
-        meshOriginal = player.GetComponentInChildren<MeshFilter>().mesh;
         playerController = player.GetComponent<PlayerController>();
         patternIndicatorMode = false;
         backgroundAudio.Play();
@@ -66,13 +63,13 @@ public class GameManager : MonoBehaviour {
     public void ResetPlayer()
     {
         player.GetComponent<PlayerController>().ResetToPosition(playerPositionOriginal);
-        player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
+        player.GetComponent<PlayerController>().ChangeForm(Form.Paper);
         poofAudio.Play();
     }
 
-    public void SetPlayerControllerScript(bool b)
+    public void SetPlayerInput(bool b)
     {
-        playerController.enabled = b;
+        playerController.SetInput(b);
     }
 
 
@@ -85,7 +82,7 @@ public class GameManager : MonoBehaviour {
     public void ActionsForRightCombination(Form selectedForm)
     {
         patternIndicatorMode = false;
-        playerController.enabled = true;
+        SetPlayerInput(true);
         changePad.isCorrectPattern = true;
         playerController.ChangeForm(selectedForm);
     }
@@ -93,7 +90,7 @@ public class GameManager : MonoBehaviour {
     public void ActionsForWrongCombination()
     {
         patternIndicatorMode = false;
-        playerController.enabled = true;
+        SetPlayerInput(true);
         StartCoroutine(changePad.makePlayerGoOut());
 
     }
