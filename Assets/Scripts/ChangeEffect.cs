@@ -9,21 +9,25 @@ public class ChangeEffect : MonoBehaviour {
 	static float particleSizeIncrement = 0.1f;
 	static float particleTimeDelay = 0.02f;
 
-	public GameObject padParticles;
+	private GameObject padParticles;
 	public bool isOnPad = false;
 	public bool isCorrectPattern = false;
 	public bool isStartPad;
 	public GameObject endPad;
-//	public bool isTeleporting = false;
 
-
-	public ParticleSystem[] ps;
+	private ParticleSystem.MainModule ps0; 
+	private ParticleSystem.MainModule ps1; 
 
 
 	void Start(){
 		if (endPad == null) {
 			isStartPad = false;
 		}
+		padParticles = transform.GetChild(0).gameObject;
+		ps0 = transform.GetChild(0).transform.GetChild(0).gameObject.GetComponent<ParticleSystem>().main;
+		ps1 = transform.GetChild(0).transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().main;
+		Debug.Log(transform.GetChild(0).transform.GetChild(0).name);
+
 	}
 
 	void Update () {
@@ -70,8 +74,6 @@ public class ChangeEffect : MonoBehaviour {
 	}
 
 	IEnumerator EffectIn(){
-		ParticleSystem.MainModule ps0 = ps[0].main;
-		ParticleSystem.MainModule ps1 = ps[1].main;
 		for (float f = smallParticles; f < largeParticles; f += particleSizeIncrement) {
 			ps0.startSize = f;
 			ps1.startSize = f;
@@ -85,8 +87,6 @@ public class ChangeEffect : MonoBehaviour {
 	}
 
 	IEnumerator EffectOut(){
-		ParticleSystem.MainModule ps0 = ps[0].main;
-		ParticleSystem.MainModule ps1 = ps[1].main;
 		for (float f = largeParticles; f > smallParticles; f -= particleSizeIncrement) {
 			ps0.startSize = f;
 			ps1.startSize = f;

@@ -6,19 +6,28 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
+    public GameObject[] rooms;
 
     PlayerController playerController;
-    public GameObject[] guards;
     public float timeToInput = 0.5f;
     public AudioSource backgroundAudio;
     public PatternManager patternManager;
 
+    // To be reset every time the player is changing rooms
+    private Vector3 playerPositionOriginal;
+
+    private Mesh meshOriginal;
     private GameObject player;
     private PadTest padTest;
     private bool patternIndicatorMode;
-    private bool musicIsPlaying = false;
-    private bool startGuardsMove = false;
-    private float musicTime;
+    private int currentRoomIndex;
+
+    internal void ChangeParametersNewRoom()
+    {
+        currentRoomIndex++;
+        playerPositionOriginal = rooms[currentRoomIndex].transform.Find("SpawnPoint").position;
+        player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
+    }
 
     void Awake()
     {
@@ -30,10 +39,13 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start () {
+        currentRoomIndex = -1;
         player = GameObject.FindWithTag("Player");
+        meshOriginal = player.GetComponentInChildren<MeshFilter>().mesh;
         playerController = player.GetComponent<PlayerController>();
         patternIndicatorMode = false;
         backgroundAudio.Play();
+        //ChangeParametersNewRoom();
 	}
 	
 	void Update () {
@@ -50,24 +62,30 @@ public class GameManager : MonoBehaviour {
         patternIndicatorMode = b;
     }
 
+    public void ResetPlayer()
+    {
+        player.GetComponent<PlayerController>().ResetToPosition(playerPositionOriginal);
+        player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
+    }
+
     public void SetPlayerControllerScript(bool b)
     {
         playerController.enabled = b;
     }
 
 
-    public void GetPattern(PadTest padTest, int[] pattern)
+    public void GetPatterns(PadTest padTest, int[][] patterns)
     {
         this.padTest = padTest;
-        patternManager.GetPattern(pattern);
+        patternManager.GetPatterns(patterns);
     }
 
-    public void ActionsForRightCombination()
+    public void ActionsForRightCombination(int correctIndex)
     {
         patternIndicatorMode = false;
         playerController.enabled = true;
         padTest.Teleportation();
-        padTest.ChangeMaterial();
+        padTest.ChangeMaterial(correctIndex);
     }
 
     public void ActionsForWrongCombination()

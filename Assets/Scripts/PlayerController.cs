@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
         float moveTime = 0f;
 
         origin = transform.localPosition;
-        LayerMask maskToIgnore = 8;
+        LayerMask maskToIgnore = LayerMask.GetMask("Obstacle");
         if (transform.forward != direction || Physics.Raycast(_raycastPoint.position, direction, 0.5f, maskToIgnore))
         {
             transform.forward = direction;
