@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ChangeEffect : MonoBehaviour {
-    
+
+    [SerializeField]
+    private PatternValidator patternValidator;
+
     public Vector3 originPositionOfPlayer;
-    public GameObject[] guardsRelated;
 
 	static float smallParticles = 0.1f;
 	static float largeParticles = 2.0f;
@@ -71,22 +73,7 @@ public class ChangeEffect : MonoBehaviour {
                 originPositionOfPlayer = col.attachedRigidbody.GetComponent<PlayerController>().origin;
                 GameManager.instance.SetPlayerControllerScript(false);
                 GameManager.instance.SetPatternIndicationMode(true);
-                int length = -1;
-                for (int i = 0; i < guardsRelated.Length; i++)
-                {
-                    int guardPatternLength = guardsRelated[i].GetComponent<AIMovement>().pattern.Length;
-                    // get longest length
-                    if (length < guardPatternLength)
-                    {
-                        length = guardPatternLength;
-                    }
-                }
-                int[][] patterns = new int[guardsRelated.Length][];
-                for (int i = 0; i < guardsRelated.Length; i++)
-                {
-                    patterns[i] = guardsRelated[i].GetComponent<AIMovement>().pattern;
-                }
-                GameManager.instance.GetPatterns(this, patterns);
+                GameManager.instance.ActivatePad(this, patternValidator);
             }
 		}
 	}

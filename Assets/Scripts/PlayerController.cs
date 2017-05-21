@@ -26,6 +26,9 @@ public class PlayerController : MonoBehaviour
     private GameObject _playerModel;
 
     [SerializeField]
+    private GameObject[] _forms;
+
+    [SerializeField]
     private Transform _raycastPoint;
 	
     private bool _isMoving;
@@ -39,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        CurrentForm = Form.Bunny;
+        CurrentForm = Form.Paper;
         StartCoroutine(InputLoop());
     }
 
@@ -188,5 +191,13 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = position;
         destination = transform.localPosition;
+    }
+
+    public void ChangeForm(Form form)
+    {
+        for (int i = 0; i < _forms.Length; i++)
+        {
+            _forms[i].SetActive(i == (int)form);
+        }
     }
 }
