@@ -41,7 +41,7 @@ public class PadTest : MonoBehaviour {
             {
                 patterns[i] = guardsRelated[i].GetComponent<AIMovement>().pattern;
             }
-            GameManager.instance.GetPatterns(this, patterns);
+            //GameManager.instance.GetPatterns(this, patterns);
         }
     }
 

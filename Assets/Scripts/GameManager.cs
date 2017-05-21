@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
 
     private Mesh meshOriginal;
     private GameObject player;
-    private PadTest padTest;
+    private ChangeEffect changePad;
     private bool patternIndicatorMode;
     private int currentRoomIndex;
 
@@ -74,9 +74,9 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public void GetPatterns(PadTest padTest, int[][] patterns)
+    public void GetPatterns(ChangeEffect changePad, int[][] patterns)
     {
-        this.padTest = padTest;
+        this.changePad = changePad;
         patternManager.GetPatterns(patterns);
     }
 
@@ -84,15 +84,15 @@ public class GameManager : MonoBehaviour {
     {
         patternIndicatorMode = false;
         playerController.enabled = true;
-        padTest.Teleportation();
-        padTest.ChangeMaterial(correctIndex);
+        changePad.isCorrectPattern = true;
+        //padTest.ChangeMaterial(correctIndex);
     }
 
     public void ActionsForWrongCombination()
     {
         patternIndicatorMode = false;
         playerController.enabled = true;
-        StartCoroutine(padTest.makePlayerGoOut());
+        StartCoroutine(changePad.makePlayerGoOut());
 
     }
 }
