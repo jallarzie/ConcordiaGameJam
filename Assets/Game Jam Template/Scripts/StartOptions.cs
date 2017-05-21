@@ -85,18 +85,7 @@ public class StartOptions : MonoBehaviour {
 		showPanels.HideMenu ();
 
         //Load the selected scene, by scene index number in build settings
-        //SceneManager.LoadScene (sceneToStart);
-        //If we are running in a standalone build of the game
-        #if UNITY_STANDALONE
-                //Quit the application
-                Application.Quit();
-        #endif
-
-                //If we are running in the editor
-        #if UNITY_EDITOR
-                //Stop playing the scene
-                UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+        SceneManager.LoadScene (sceneToStart);
     }
 
     public void HideDelayed()

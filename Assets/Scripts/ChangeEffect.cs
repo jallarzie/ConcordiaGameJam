@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ChangeEffect : MonoBehaviour {
+    
+    public Vector3 originPositionOfPlayer;
+    public GameObject[] guardsRelated;
 
 	static float smallParticles = 0.1f;
 	static float largeParticles = 2.0f;
@@ -63,6 +66,28 @@ public class ChangeEffect : MonoBehaviour {
 			Debug.Log ("Im on the pad");
 			padParticles.SetActive(true);
 			isOnPad = true;
+            if (isStartPad)
+            {
+                originPositionOfPlayer = col.attachedRigidbody.GetComponent<PlayerController>().origin;
+                GameManager.instance.SetPlayerControllerScript(false);
+                GameManager.instance.SetPatternIndicationMode(true);
+                int length = -1;
+                for (int i = 0; i < guardsRelated.Length; i++)
+                {
+                    int guardPatternLength = guardsRelated[i].GetComponent<AIMovement>().pattern.Length;
+                    // get longest length
+                    if (length < guardPatternLength)
+                    {
+                        length = guardPatternLength;
+                    }
+                }
+                int[][] patterns = new int[guardsRelated.Length][];
+                for (int i = 0; i < guardsRelated.Length; i++)
+                {
+                    patterns[i] = guardsRelated[i].GetComponent<AIMovement>().pattern;
+                }
+                GameManager.instance.GetPatterns(this, patterns);
+            }
 		}
 	}
 	void OnTriggerExit(Collider col){
@@ -97,5 +122,14 @@ public class ChangeEffect : MonoBehaviour {
 		padParticles.SetActive(false);
 		Debug.Log ("TELEPORTED");
 	}
+
+    public IEnumerator makePlayerGoOut()
+    {
+        PlayerController player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+        player.Move(originPositionOfPlayer - player.transform.position); // to make the player rotate
+        yield return new WaitForSeconds(0.5f);
+        player.Move(originPositionOfPlayer - player.transform.position); // to make the player move
+    }
 
 }
