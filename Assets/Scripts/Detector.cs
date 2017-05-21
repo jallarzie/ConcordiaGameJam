@@ -54,10 +54,6 @@ public class Detector : MonoBehaviour {
         {
             _strikes++;
             _light.color = _spotColors[_strikes < _spotColors.Length ? _strikes : _spotColors.Length - 1];
-        } else
-        {
-            _strikes--;
-            _light.color = _spotColors[_strikes > _spotColors.Length ? _strikes : 0];
         }
     }
 }

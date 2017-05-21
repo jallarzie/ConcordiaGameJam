@@ -4,7 +4,6 @@ using UnityEngine;
 
 public enum Form
 {
-    Paper,
     Bunny,
     Frog,
     Fish
@@ -18,7 +17,8 @@ public enum MoveAction
 
 public class PatternValidator : MonoBehaviour {
 
-    public int _patternLenght;
+    [SerializeField]
+    private int _patternLenght;
     [SerializeField]
     private float _interval;
 
@@ -73,7 +73,7 @@ public class PatternValidator : MonoBehaviour {
                 return _fishPattern;
         }
 
-        return new MoveAction[0]; 
+        return null; 
     }
 
     public MoveAction GetCurrentActionForForm(Form form)
@@ -86,20 +86,11 @@ public class PatternValidator : MonoBehaviour {
         switch(form)
         {
             case Form.Bunny:
-                if (_currentAction < _bunnyPattern.Length)
-                    return _bunnyPattern[_currentAction];
-                else
-                    return MoveAction.NoHop;
+                return _bunnyPattern[_currentAction];
             case Form.Frog:
-                if (_currentAction < _frogPattern.Length)
-                    return _frogPattern[_currentAction];
-                else
-                    return MoveAction.NoHop;
+                return _frogPattern[_currentAction];
             case Form.Fish:
-                if (_currentAction < _fishPattern.Length)
-                    return _fishPattern[_currentAction];
-                else
-                    return MoveAction.NoHop;
+                return _fishPattern[_currentAction];
         }
 
         return MoveAction.NoHop;

@@ -74,18 +74,18 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public void ActivatePad(ChangeEffect changePad, PatternValidator validator)
+    public void GetPatterns(ChangeEffect changePad, int[][] patterns)
     {
         this.changePad = changePad;
-        patternManager.SetPatterValidator(validator);
+        patternManager.GetPatterns(patterns);
     }
 
-    public void ActionsForRightCombination(Form selectedForm)
+    public void ActionsForRightCombination(int correctIndex)
     {
         patternIndicatorMode = false;
         playerController.enabled = true;
         changePad.isCorrectPattern = true;
-        playerController.ChangeForm(selectedForm);
+        //padTest.ChangeMaterial(correctIndex);
     }
 
     public void ActionsForWrongCombination()
