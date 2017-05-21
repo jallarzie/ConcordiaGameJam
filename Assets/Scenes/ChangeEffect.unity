@@ -130,7 +130,6 @@ GameObject:
   - component: {fileID: 325740792}
   - component: {fileID: 325740791}
   - component: {fileID: 325740790}
-  - component: {fileID: 325740789}
   - component: {fileID: 325740793}
   m_Layer: 8
   m_Name: PadTestStart
@@ -154,21 +153,6 @@ Transform:
   m_Father: {fileID: 1239061410}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &325740789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114542933063701794, guid: 0c23ac9a358ac914795470a36e024dfd,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 325740787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10cb1785590077243ad811a1726b67d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originPositionOfPlayer: {x: 0, y: 0, z: 0}
-  guardRelated: {fileID: 0}
-  padTestEnd: {fileID: 1827140025}
 --- !u!23 &325740790
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -238,6 +222,7 @@ MonoBehaviour:
   isCorrectPattern: 0
   isStartPad: 1
   endPad: {fileID: 680041662}
+  isTeleporting: 0
   ps:
   - {fileID: 2104633669}
   - {fileID: 1745005018}
@@ -352,7 +337,6 @@ GameObject:
   - component: {fileID: 680041668}
   - component: {fileID: 680041667}
   - component: {fileID: 680041666}
-  - component: {fileID: 680041665}
   - component: {fileID: 680041664}
   m_Layer: 8
   m_Name: End
@@ -392,24 +376,10 @@ MonoBehaviour:
   isCorrectPattern: 0
   isStartPad: 1
   endPad: {fileID: 0}
+  isTeleporting: 0
   ps:
   - {fileID: 237390411}
   - {fileID: 80813841}
---- !u!114 &680041665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114542933063701794, guid: 0c23ac9a358ac914795470a36e024dfd,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 680041662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10cb1785590077243ad811a1726b67d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originPositionOfPlayer: {x: 0, y: 0, z: 0}
-  guardRelated: {fileID: 0}
-  padTestEnd: {fileID: 1827140025}
 --- !u!23 &680041666
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class ChangeEffect : MonoBehaviour {
 
+	static float smallParticles = 0.1f;
+	static float largeParticles = 2.0f;
+	static float particleSizeIncrement = 0.1f;
+	static float particleTimeDelay = 0.02f;
+
 	public GameObject padParticles;
 	public bool isOnPad = false;
 	public bool isCorrectPattern = false;
 	public bool isStartPad;
 	public GameObject endPad;
-	public bool isTeleporting = false;
+//	public bool isTeleporting = false;
 
 
 	public ParticleSystem[] ps;
@@ -36,6 +41,7 @@ public class ChangeEffect : MonoBehaviour {
 		if(isOnPad && isStartPad){
 			if(isCorrectPattern){
 				StartCoroutine (EffectIn());
+				isCorrectPattern = false;
 			}
 		}
 
@@ -64,26 +70,30 @@ public class ChangeEffect : MonoBehaviour {
 	}
 
 	IEnumerator EffectIn(){
-		for (float f = 0.06f; f < 4.0f; f += 0.1f) {
-			ParticleSystem.MainModule ps0 = ps[0].main;
-			ParticleSystem.MainModule ps1 = ps[1].main;
+		ParticleSystem.MainModule ps0 = ps[0].main;
+		ParticleSystem.MainModule ps1 = ps[1].main;
+		for (float f = smallParticles; f < largeParticles; f += particleSizeIncrement) {
 			ps0.startSize = f;
 			ps1.startSize = f;
-			yield return new WaitForSeconds(.1f);
+			yield return new WaitForSeconds(particleTimeDelay);
 		}
+		ps0.startSize = smallParticles;
+		ps1.startSize = smallParticles;
 		padParticles.SetActive(false);
 		Debug.Log ("TELEPORT");
 		GameObject.FindWithTag ("Player").transform.position = endPad.transform.position;
 	}
 
 	IEnumerator EffectOut(){
-		for (float f = 4.0f; f > 0.06f; f -= 0.1f) {
-			ParticleSystem.MainModule ps0 = ps[0].main;
-			ParticleSystem.MainModule ps1 = ps[1].main;
+		ParticleSystem.MainModule ps0 = ps[0].main;
+		ParticleSystem.MainModule ps1 = ps[1].main;
+		for (float f = largeParticles; f > smallParticles; f -= particleSizeIncrement) {
 			ps0.startSize = f;
 			ps1.startSize = f;
-			yield return new WaitForSeconds(.1f);
+			yield return new WaitForSeconds(particleTimeDelay);
 		}
+		ps0.startSize = largeParticles;
+		ps1.startSize = largeParticles;
 		padParticles.SetActive(false);
 		Debug.Log ("TELEPORTED");
 	}
