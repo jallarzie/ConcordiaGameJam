@@ -40,29 +40,35 @@ public class PlayerController : MonoBehaviour
 
     public Form CurrentForm { get; private set; }
 
+    private bool _inputActive;
+
     private void Start()
     {
         CurrentForm = Form.Paper;
+        _inputActive = true;
         StartCoroutine(InputLoop());
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || InputManager.ActiveDevice.DPad.Up.WasPressed)
+        if (_inputActive)
         {
-            _lastDirection = Direction.Up;
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow) || InputManager.ActiveDevice.DPad.Down.WasPressed)
-        {
-            _lastDirection = Direction.Down;
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || InputManager.ActiveDevice.DPad.Left.WasPressed)
-        {
-            _lastDirection = Direction.Left;
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow) || InputManager.ActiveDevice.DPad.Right.WasPressed)
-        {
-            _lastDirection = Direction.Right;
+            if (Input.GetKeyDown(KeyCode.UpArrow) || InputManager.ActiveDevice.DPad.Up.WasPressed)
+            {
+                _lastDirection = Direction.Up;
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow) || InputManager.ActiveDevice.DPad.Down.WasPressed)
+            {
+                _lastDirection = Direction.Down;
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || InputManager.ActiveDevice.DPad.Left.WasPressed)
+            {
+                _lastDirection = Direction.Left;
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow) || InputManager.ActiveDevice.DPad.Right.WasPressed)
+            {
+                _lastDirection = Direction.Right;
+            }
         }
     }
 
@@ -198,6 +204,17 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < _forms.Length; i++)
         {
             _forms[i].SetActive(i == (int)form);
+        }
+
+        CurrentForm = form;
+    }
+
+    public void SetInput(bool active)
+    {
+        _inputActive = active;
+        if (active)
+        {
+            _lastDirection = Direction.None;
         }
     }
 }

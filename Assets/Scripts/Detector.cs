@@ -18,6 +18,9 @@ public class Detector : MonoBehaviour {
     private PlayerController _target;
 
     private int _strikes = 0;
+    private int _maxStrikes = 6;
+
+    private bool streak = false;
 
     private void Update()
     {
@@ -45,19 +48,33 @@ public class Detector : MonoBehaviour {
             _detector.LookAt(Vector3.zero);
             _strikes = 0;
             _light.color = _spotColors[0];
+            streak = false;
         }
     }
 
     private void OnTargetAction(MoveAction action)
     {
+        Debug.Log(action);
+
         if (action != _patternValidator.GetCurrentActionForForm(_target.CurrentForm))
         {
-            _strikes++;
-            _light.color = _spotColors[_strikes < _spotColors.Length ? _strikes : _spotColors.Length - 1];
-        } else
+            _strikes = Mathf.Min(_maxStrikes, _strikes + 1);
+            _light.color = _spotColors[Mathf.Min(_strikes, _spotColors.Length - 1)];
+            streak = false;
+        }
+        else if (streak)
         {
-            _strikes--;
-            _light.color = _spotColors[_strikes > _spotColors.Length ? _strikes : 0];
+            _strikes = Mathf.Max(0, _strikes - 1);
+            _light.color = _spotColors[_strikes];
+        }
+        else
+        {
+            streak = true;
+        }
+        if (_strikes >= _maxStrikes)
+        {
+            _strikes = 0;
+            GameManager.instance.ResetPlayer();
         }
     }
 }

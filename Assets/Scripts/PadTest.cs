@@ -24,7 +24,7 @@ public class PadTest : MonoBehaviour {
         if (collider.transform.tag == "Player")
         {
             originPositionOfPlayer = player.GetComponent<PlayerController>().origin;
-            GameManager.instance.SetPlayerControllerScript(false);
+            GameManager.instance.SetPlayerInput(false);
             GameManager.instance.SetPatternIndicationMode(true);
             int length = -1;
             for (int i = 0; i < guardsRelated.Length; i++)

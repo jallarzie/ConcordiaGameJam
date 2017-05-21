@@ -35,7 +35,7 @@ public class PatternManager : MonoBehaviour {
                 currentIndexPatternInput++;
                 if (currentIndexPatternInput < patternInput.Length)
                 {
-                    patternNeutralAudio.Play();
+                    PlaySound(false, false, false);
                 }
             } else if (Input.GetKeyDown("n"))
             {
@@ -44,7 +44,7 @@ public class PatternManager : MonoBehaviour {
                 currentIndexPatternInput++;
                 if (currentIndexPatternInput < patternInput.Length)
                 {
-                    patternNeutralAudio.Play();
+                    PlaySound(false, false, false);
                 }
             }
             if (currentIndexPatternInput >= patternInput.Length)
@@ -53,7 +53,8 @@ public class PatternManager : MonoBehaviour {
                 bool equals = ComparePatterns();
                 StartCoroutine("DisplayAndResetUI", equals);
                 Reset();
-                PlaySound(true, equals);
+                PlaySound(false, true, equals);
+                PlaySound(true, false, false); // Transformation 
                 if (equals)
                 {
                     GameManager.instance.ActionsForRightCombination(selectedForm);
@@ -66,9 +67,12 @@ public class PatternManager : MonoBehaviour {
 
     }
 
-    private void PlaySound(bool finalInput, bool equals)
+    private void PlaySound(bool transformation, bool finalInput, bool equals)
     {
-        if (finalInput)
+        if (transformation)
+        {
+            rufflingPaperAudio.Play();
+        }else if (finalInput)
         {
             if (equals)
             {
@@ -81,7 +85,7 @@ public class PatternManager : MonoBehaviour {
         } else
         {
             patternNeutralAudio.Play();
-        }
+        } 
     }
 
     private IEnumerator DisplayAndResetUI(bool equal)
