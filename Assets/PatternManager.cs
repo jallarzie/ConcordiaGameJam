@@ -8,9 +8,14 @@ public class PatternManager : MonoBehaviour {
 
     public GameObject patternIndicatorUI;
     public GameObject indicatorPrefab;
-	public GameObject indicatorPrefabBlue;
-	public GameObject indicatorPrefabRed;
-	public GameObject indicatorPrefabGreen;
+    public GameObject indicatorPrefabBlue;
+    public GameObject indicatorPrefabRed;
+    public GameObject indicatorPrefabGreen;
+
+    public AudioSource patternFailureAudio;
+    public AudioSource patternSucceedAudio;
+    public AudioSource patternNeutralAudio;
+    public AudioSource rufflingPaperAudio;
 
     private int correctIndex = -1;
     private GameObject[] indicatorsArray;
@@ -33,53 +38,96 @@ public class PatternManager : MonoBehaviour {
     private const int HOP = 10;
     private const int NOHOP = 11;
 
-    void Start () {
-		
-	}
-	
-	void Update () {
-		if (GameManager.instance.GetPatternIndicationMode() && readyForInput)
+    void Start() {
+
+    }
+
+    void Update() {
+        if (GameManager.instance.GetPatternIndicationMode() && readyForInput)
         {
             if (Input.GetKeyDown("h"))
             {
                 patternInput[currentIndexPatternInput] = HOP;
-                Debug.Log("HOP input");
-                indicatorsArray[currentIndexPatternInput].GetComponent<Image>().color = Color.green;
+                indicatorsArray[currentIndexPatternInput].GetComponent<Image>().sprite = indicatorPrefabBlue.GetComponent<Image>().sprite;
                 currentIndexPatternInput++;
+                if (currentIndexPatternInput < patternInput.Length)
+                {
+                    patternNeutralAudio.Play();
+                }
             } else if (Input.GetKeyDown("n"))
             {
                 patternInput[currentIndexPatternInput] = NOHOP;
-                Debug.Log("NOHOP input");
-                indicatorsArray[currentIndexPatternInput].GetComponent<Image>().color = Color.green;
+                indicatorsArray[currentIndexPatternInput].GetComponent<Image>().sprite = indicatorPrefabBlue.GetComponent<Image>().sprite;
                 currentIndexPatternInput++;
+                if (currentIndexPatternInput < patternInput.Length)
+                {
+                    patternNeutralAudio.Play();
+                }
             }
             if (currentIndexPatternInput >= patternInput.Length)
             {
                 Debug.Log("check validity of pattern input");
                 bool equals = ComparePatterns();
-                Debug.Log(equals);
+                StartCoroutine("DisplayAndResetUI", equals);
+                Reset();
+                PlaySound(true, equals);
                 if (equals)
-                {
-                    Reset();
+                {   
                     GameManager.instance.ActionsForRightCombination(correctIndex);
-                    
+
                 } else
-                {
-                    Reset();
-                    GameManager.instance.ActionsForWrongCombination();                   
+                {                 
+                    GameManager.instance.ActionsForWrongCombination();
                 }
-            }
+            } 
         }
 
-	}
+    }
 
-    private void Reset()
+    private void PlaySound(bool finalInput, bool equals)
     {
-        readyForInput = false;
+        if (finalInput)
+        {
+            if (equals)
+            {
+                patternSucceedAudio.Play();
+            }
+            else
+            {
+                patternFailureAudio.Play();
+            }
+        } else
+        {
+            patternNeutralAudio.Play();
+        }
+
+    }
+
+    private IEnumerator DisplayAndResetUI(bool equal)
+    {
+        if (equal)
+        {
+            for (int i = 0; i < indicatorsArray.Length; i++)
+            {
+                indicatorsArray[i].GetComponent<Image>().sprite = indicatorPrefabGreen.GetComponent<Image>().sprite;
+            }
+        } else
+        {
+            for (int i = 0; i < indicatorsArray.Length; i++)
+            {
+                indicatorsArray[i].GetComponent<Image>().sprite = indicatorPrefabRed.GetComponent<Image>().sprite;
+            }
+        }
+        yield return new WaitForSeconds(2);
         for (int i = 0; i < indicatorsArray.Length; i++)
         {
             Destroy(indicatorsArray[i]);
         }
+    }
+
+    private void Reset()
+    {
+        readyForInput = false;
         patterns = null;
         patternsModified = null;
         patternInput = null;
