@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
+    public GameObject[] rooms;
 
     PlayerController playerController;
     public float timeToInput = 0.5f;
@@ -19,6 +20,14 @@ public class GameManager : MonoBehaviour {
     private GameObject player;
     private PadTest padTest;
     private bool patternIndicatorMode;
+    private int currentRoomIndex;
+
+    internal void ChangeParametersNewRoom()
+    {
+        currentRoomIndex++;
+        playerPositionOriginal = rooms[currentRoomIndex].transform.Find("SpawnPoint").position;
+        player.GetComponentInChildren<MeshFilter>().mesh = meshOriginal;
+    }
 
     void Awake()
     {
@@ -30,12 +39,13 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start () {
+        currentRoomIndex = -1;
         player = GameObject.FindWithTag("Player");
         meshOriginal = player.GetComponentInChildren<MeshFilter>().mesh;
-        playerPositionOriginal = player.transform.position;
         playerController = player.GetComponent<PlayerController>();
         patternIndicatorMode = false;
         backgroundAudio.Play();
+        //ChangeParametersNewRoom();
 	}
 	
 	void Update () {
