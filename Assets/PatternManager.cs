@@ -8,6 +8,9 @@ public class PatternManager : MonoBehaviour {
 
     public GameObject patternIndicatorUI;
     public GameObject indicatorPrefab;
+	public GameObject indicatorPrefabBlue;
+	public GameObject indicatorPrefabRed;
+	public GameObject indicatorPrefabGreen;
 
     private int correctIndex = -1;
     private GameObject[] indicatorsArray;
